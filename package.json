@@ -1,7 +1,7 @@
 {
   "name": "unwind-array",
   "version": "1.1.1",
-  "description": "Works like MongoDB $unwind",
+  "description": "Unwinds arrays in the similar way like MongoDB $unwind. Supports shallow and deep nested paths, defined as a string with dot notation.",
   "main": "src/index.js",
   "scripts": {
     "test": "mocha",
