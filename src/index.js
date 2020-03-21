@@ -13,7 +13,7 @@ const unwindArraysRecursive = (dataObject, path, currPath) => {
       const newObjectCopy = {}
       Object.keys(dataObject).forEach(dataObjectKey => {
         if (dataObject[dataObjectKey] instanceof Array && dataObject[dataObjectKey].length === 0) {
-          // newObjectCopy[dataObjectKey] = null;
+          // omit empty arrays newObjectCopy[dataObjectKey] = null;
         } else {
           newObjectCopy[dataObjectKey] = dataObject[dataObjectKey]
         }
