@@ -3,33 +3,25 @@ const { expect } = chai
 const { unwindArrays } = require('../src')
 
 describe('Unwind array', () => {
-  const testDataObject = {
-    title: 'foobar',
-    topLevelArr: [
-      {
-        innerOneArr: [
-          { innerOnePropertyOne: 'test1' },
-          { innerOnePropertyTwo: 'test2' },
-          { innerOnePropertyThree: 'test3' }
-        ],
-        name: 'blah',
-        innerTwoArr: [
-          { innerTwoPropertyOne: 'test5' },
-          { innerTwoPropertyTwo: 'test3' },
-          { innerTwoPropertyThree: 'test8' }
-        ],
-        innerThreeArr: [{ innerThreeProperty: 'test1', innerInnerOneArr: [{ num: 1 }, { mum: 2 }] }],
-        innerEmptyArr: []
-      },
-      {
-        name: 'blah2'
-      }
-    ]
-  }
-
   it('#has expected data for single paths', () => {
-    const result = unwindArrays(testDataObject, 'topLevelArr.innerOneArr')
-    expect(result.length).to.be.equal(4)
+    const result = unwindArrays(
+      {
+        title: 'foobar',
+        topLevelArr: [
+          {
+            innerOneArr: [{ innerOnePropertyOne: 'test1' }, { innerOnePropertyTwo: 'test2' }],
+            name: 'blah',
+            innerTwoArr: [{ innerTwoPropertyThree: 'test8' }],
+            innerEmptyArr: []
+          },
+          {
+            name: 'blah2'
+          }
+        ]
+      },
+      'topLevelArr.innerOneArr'
+    )
+    expect(result.length).to.be.equal(3)
     expect(result).to.be.deep.equal([
       {
         title: 'foobar',
@@ -40,26 +32,7 @@ describe('Unwind array', () => {
           name: 'blah',
           innerTwoArr: [
             {
-              innerTwoPropertyOne: 'test5'
-            },
-            {
-              innerTwoPropertyTwo: 'test3'
-            },
-            {
               innerTwoPropertyThree: 'test8'
-            }
-          ],
-          innerThreeArr: [
-            {
-              innerThreeProperty: 'test1',
-              innerInnerOneArr: [
-                {
-                  num: 1
-                },
-                {
-                  mum: 2
-                }
-              ]
             }
           ]
         }
@@ -73,59 +46,7 @@ describe('Unwind array', () => {
           name: 'blah',
           innerTwoArr: [
             {
-              innerTwoPropertyOne: 'test5'
-            },
-            {
-              innerTwoPropertyTwo: 'test3'
-            },
-            {
               innerTwoPropertyThree: 'test8'
-            }
-          ],
-          innerThreeArr: [
-            {
-              innerThreeProperty: 'test1',
-              innerInnerOneArr: [
-                {
-                  num: 1
-                },
-                {
-                  mum: 2
-                }
-              ]
-            }
-          ]
-        }
-      },
-      {
-        title: 'foobar',
-        topLevelArr: {
-          innerOneArr: {
-            innerOnePropertyThree: 'test3'
-          },
-          name: 'blah',
-          innerTwoArr: [
-            {
-              innerTwoPropertyOne: 'test5'
-            },
-            {
-              innerTwoPropertyTwo: 'test3'
-            },
-            {
-              innerTwoPropertyThree: 'test8'
-            }
-          ],
-          innerThreeArr: [
-            {
-              innerThreeProperty: 'test1',
-              innerInnerOneArr: [
-                {
-                  num: 1
-                },
-                {
-                  mum: 2
-                }
-              ]
             }
           ]
         }
@@ -139,9 +60,38 @@ describe('Unwind array', () => {
     ])
   })
   it('#handles incorrect path', () => {
-    const result = unwindArrays(testDataObject, 'test')
+    const result = unwindArrays(
+      {
+        title: 'foobar',
+        topLevelArr: [
+          {
+            innerOneArr: [{ innerOnePropertyOne: 'test1' }, { innerOnePropertyTwo: 'test2' }],
+            name: 'blah',
+            innerEmptyArr: []
+          },
+          {
+            name: 'blah2'
+          }
+        ]
+      },
+      'test'
+    )
     expect(result.length).to.be.equal(1)
-    expect(result).to.be.deep.equal([testDataObject])
+    expect(result).to.be.deep.equal([
+      {
+        title: 'foobar',
+        topLevelArr: [
+          {
+            innerOneArr: [{ innerOnePropertyOne: 'test1' }, { innerOnePropertyTwo: 'test2' }],
+            name: 'blah',
+            innerEmptyArr: []
+          },
+          {
+            name: 'blah2'
+          }
+        ]
+      }
+    ])
   })
   const testArray = [
     {
@@ -176,7 +126,32 @@ describe('Unwind array', () => {
     ])
   })
   it('#has combination of expected data for multiple paths', () => {
-    const result = unwindArrays(testDataObject, 'topLevelArr')
+    const result = unwindArrays(
+      {
+        title: 'foobar',
+        topLevelArr: [
+          {
+            innerOneArr: [
+              { innerOnePropertyOne: 'test1' },
+              { innerOnePropertyTwo: 'test2' },
+              { innerOnePropertyThree: 'test3' }
+            ],
+            name: 'blah',
+            innerTwoArr: [
+              { innerTwoPropertyOne: 'test5' },
+              { innerTwoPropertyTwo: 'test3' },
+              { innerTwoPropertyThree: 'test8' }
+            ],
+            innerThreeArr: [{ innerThreeProperty: 'test1', innerInnerOneArr: [{ num: 1 }, { mum: 2 }] }],
+            innerEmptyArr: []
+          },
+          {
+            name: 'blah2'
+          }
+        ]
+      },
+      'topLevelArr'
+    )
       .reduce((agg, item) => [...agg, ...unwindArrays(item, 'topLevelArr.innerOneArr')], [])
       .reduce((agg, item) => [...agg, ...unwindArrays(item, 'topLevelArr.innerEmptyArr')], [])
       .reduce((agg, item) => [...agg, ...unwindArrays(item, 'topLevelArr.innerThreeArr.innerInnerOneArr')], [])
