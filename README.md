@@ -34,13 +34,14 @@ unwinding deep path
           }
         ]
       },
-      'topLevelArr.innerOneArr'
+      { path: 'topLevelArr.innerOneArr' }
     )
     expect(result.length).to.be.equal(3)
     expect(result).to.be.deep.equal([
       {
         title: 'foobar',
         topLevelArr: {
+          innerEmptyArr: [],
           innerOneArr: {
             innerOnePropertyOne: 'test1'
           },
@@ -55,6 +56,7 @@ unwinding deep path
       {
         title: 'foobar',
         topLevelArr: {
+          innerEmptyArr: [],
           innerOneArr: {
             innerOnePropertyTwo: 'test2'
           },
@@ -79,7 +81,7 @@ more advanced usage example of unwinding multiple paths, return combination of d
 
 ```javascript 1.8
    const { unwind } = require('unwind-array')
-   const result = unwind(
+  const result = unwind(
       {
         title: 'foobar',
         topLevelArr: [
@@ -103,12 +105,21 @@ more advanced usage example of unwinding multiple paths, return combination of d
           }
         ]
       },
-      'topLevelArr'
+      { path: 'topLevelArr' }
     )
-      .reduce((agg, item) => [...agg, ...unwind(item, 'topLevelArr.innerOneArr')], [])
-      .reduce((agg, item) => [...agg, ...unwind(item, 'topLevelArr.innerEmptyArr')], [])
-      .reduce((agg, item) => [...agg, ...unwind(item, 'topLevelArr.innerThreeArr.innerInnerOneArr')], [])
-      .reduce((agg, item) => [...agg, ...unwind(item, 'topLevelArr.innerTwoArr')], [])
+      .reduce((agg, item) => [...agg, ...unwind(item, { path: 'topLevelArr.innerOneArr' })], [])
+      .reduce(
+        (agg, item) => [
+          ...agg,
+          ...unwind(item, {
+            path: 'topLevelArr.innerEmptyArr',
+            preserveEmptyArray: true
+          })
+        ],
+        []
+      )
+      .reduce((agg, item) => [...agg, ...unwind(item, { path: 'topLevelArr.innerThreeArr.innerInnerOneArr' })], [])
+      .reduce((agg, item) => [...agg, ...unwind(item, { path: 'topLevelArr.innerTwoArr' })], [])
     expect(result.length).to.be.equal(19)
     expect(result).to.be.deep.equal([
       {
@@ -126,7 +137,8 @@ more advanced usage example of unwinding multiple paths, return combination of d
             innerInnerOneArr: {
               num: 1
             }
-          }
+          },
+          innerEmptyArr: []
         }
       },
       {
@@ -144,7 +156,8 @@ more advanced usage example of unwinding multiple paths, return combination of d
             innerInnerOneArr: {
               num: 1
             }
-          }
+          },
+          innerEmptyArr: []
         }
       },
       {
@@ -162,7 +175,8 @@ more advanced usage example of unwinding multiple paths, return combination of d
             innerInnerOneArr: {
               num: 1
             }
-          }
+          },
+          innerEmptyArr: []
         }
       },
       {
@@ -180,7 +194,8 @@ more advanced usage example of unwinding multiple paths, return combination of d
             innerInnerOneArr: {
               mum: 2
             }
-          }
+          },
+          innerEmptyArr: []
         }
       },
       {
@@ -198,7 +213,8 @@ more advanced usage example of unwinding multiple paths, return combination of d
             innerInnerOneArr: {
               mum: 2
             }
-          }
+          },
+          innerEmptyArr: []
         }
       },
       {
@@ -216,7 +232,8 @@ more advanced usage example of unwinding multiple paths, return combination of d
             innerInnerOneArr: {
               mum: 2
             }
-          }
+          },
+          innerEmptyArr: []
         }
       },
       {
@@ -234,7 +251,8 @@ more advanced usage example of unwinding multiple paths, return combination of d
             innerInnerOneArr: {
               num: 1
             }
-          }
+          },
+          innerEmptyArr: []
         }
       },
       {
@@ -252,7 +270,8 @@ more advanced usage example of unwinding multiple paths, return combination of d
             innerInnerOneArr: {
               num: 1
             }
-          }
+          },
+          innerEmptyArr: []
         }
       },
       {
@@ -270,7 +289,8 @@ more advanced usage example of unwinding multiple paths, return combination of d
             innerInnerOneArr: {
               num: 1
             }
-          }
+          },
+          innerEmptyArr: []
         }
       },
       {
@@ -288,7 +308,8 @@ more advanced usage example of unwinding multiple paths, return combination of d
             innerInnerOneArr: {
               mum: 2
             }
-          }
+          },
+          innerEmptyArr: []
         }
       },
       {
@@ -306,7 +327,8 @@ more advanced usage example of unwinding multiple paths, return combination of d
             innerInnerOneArr: {
               mum: 2
             }
-          }
+          },
+          innerEmptyArr: []
         }
       },
       {
@@ -324,7 +346,8 @@ more advanced usage example of unwinding multiple paths, return combination of d
             innerInnerOneArr: {
               mum: 2
             }
-          }
+          },
+          innerEmptyArr: []
         }
       },
       {
@@ -342,7 +365,8 @@ more advanced usage example of unwinding multiple paths, return combination of d
             innerInnerOneArr: {
               num: 1
             }
-          }
+          },
+          innerEmptyArr: []
         }
       },
       {
@@ -360,7 +384,8 @@ more advanced usage example of unwinding multiple paths, return combination of d
             innerInnerOneArr: {
               num: 1
             }
-          }
+          },
+          innerEmptyArr: []
         }
       },
       {
@@ -378,7 +403,8 @@ more advanced usage example of unwinding multiple paths, return combination of d
             innerInnerOneArr: {
               num: 1
             }
-          }
+          },
+          innerEmptyArr: []
         }
       },
       {
@@ -396,7 +422,8 @@ more advanced usage example of unwinding multiple paths, return combination of d
             innerInnerOneArr: {
               mum: 2
             }
-          }
+          },
+          innerEmptyArr: []
         }
       },
       {
@@ -414,7 +441,8 @@ more advanced usage example of unwinding multiple paths, return combination of d
             innerInnerOneArr: {
               mum: 2
             }
-          }
+          },
+          innerEmptyArr: []
         }
       },
       {
@@ -432,7 +460,8 @@ more advanced usage example of unwinding multiple paths, return combination of d
             innerInnerOneArr: {
               mum: 2
             }
-          }
+          },
+          innerEmptyArr: []
         }
       },
       {

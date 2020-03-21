@@ -19,13 +19,14 @@ describe('Unwind array', () => {
           }
         ]
       },
-      'topLevelArr.innerOneArr'
+      { path: 'topLevelArr.innerOneArr' }
     )
     expect(result.length).to.be.equal(3)
     expect(result).to.be.deep.equal([
       {
         title: 'foobar',
         topLevelArr: {
+          innerEmptyArr: [],
           innerOneArr: {
             innerOnePropertyOne: 'test1'
           },
@@ -40,6 +41,7 @@ describe('Unwind array', () => {
       {
         title: 'foobar',
         topLevelArr: {
+          innerEmptyArr: [],
           innerOneArr: {
             innerOnePropertyTwo: 'test2'
           },
@@ -74,7 +76,7 @@ describe('Unwind array', () => {
           }
         ]
       },
-      'test'
+      { path: 'test' }
     )
     expect(result.length).to.be.equal(1)
     expect(result).to.be.deep.equal([
@@ -93,16 +95,47 @@ describe('Unwind array', () => {
       }
     ])
   })
-  const testArray = [
-    {
-      topLevelProperty: 'test1',
-      topLevelPropertyArray: [{ levelOneProperty: 'test3' }, { levelOneProperty: 'test4' }]
-    },
-    { topLevelProperty: 'test2' }
-  ]
+  it('#empty array will be removed', () => {
+    const result = unwind(
+      {
+        title: 'foobar',
+        topLevelArr: [
+          {
+            name: 'blah',
+            innerEmptyArr: []
+          },
+          {
+            name: 'blah2'
+          }
+        ]
+      },
+      { path: 'topLevelArr.innerEmptyArr' }
+    )
+    expect(result.length).to.be.equal(2)
+    expect(result).to.be.deep.equal([
+      {
+        title: 'foobar',
+        topLevelArr: {
+          name: 'blah'
+        }
+      },
+      {
+        title: 'foobar',
+        topLevelArr: {
+          name: 'blah2'
+        }
+      }
+    ])
+  })
   it('#array has expected data for single path', () => {
-    const result = testArray
-      .map(piece => unwind(piece, 'topLevelPropertyArray'))
+    const result = [
+      {
+        topLevelProperty: 'test1',
+        topLevelPropertyArray: [{ levelOneProperty: 'test3' }, { levelOneProperty: 'test4' }]
+      },
+      { topLevelProperty: 'test2' }
+    ]
+      .map(piece => unwind(piece, { path: 'topLevelPropertyArray' }))
       .reduce((agg, arr) => {
         return [...agg, ...arr]
       }, [])
@@ -150,12 +183,21 @@ describe('Unwind array', () => {
           }
         ]
       },
-      'topLevelArr'
+      { path: 'topLevelArr' }
     )
-      .reduce((agg, item) => [...agg, ...unwind(item, 'topLevelArr.innerOneArr')], [])
-      .reduce((agg, item) => [...agg, ...unwind(item, 'topLevelArr.innerEmptyArr')], [])
-      .reduce((agg, item) => [...agg, ...unwind(item, 'topLevelArr.innerThreeArr.innerInnerOneArr')], [])
-      .reduce((agg, item) => [...agg, ...unwind(item, 'topLevelArr.innerTwoArr')], [])
+      .reduce((agg, item) => [...agg, ...unwind(item, { path: 'topLevelArr.innerOneArr' })], [])
+      .reduce(
+        (agg, item) => [
+          ...agg,
+          ...unwind(item, {
+            path: 'topLevelArr.innerEmptyArr',
+            preserveEmptyArray: true
+          })
+        ],
+        []
+      )
+      .reduce((agg, item) => [...agg, ...unwind(item, { path: 'topLevelArr.innerThreeArr.innerInnerOneArr' })], [])
+      .reduce((agg, item) => [...agg, ...unwind(item, { path: 'topLevelArr.innerTwoArr' })], [])
     expect(result.length).to.be.equal(19)
     expect(result).to.be.deep.equal([
       {
@@ -173,7 +215,8 @@ describe('Unwind array', () => {
             innerInnerOneArr: {
               num: 1
             }
-          }
+          },
+          innerEmptyArr: []
         }
       },
       {
@@ -191,7 +234,8 @@ describe('Unwind array', () => {
             innerInnerOneArr: {
               num: 1
             }
-          }
+          },
+          innerEmptyArr: []
         }
       },
       {
@@ -209,7 +253,8 @@ describe('Unwind array', () => {
             innerInnerOneArr: {
               num: 1
             }
-          }
+          },
+          innerEmptyArr: []
         }
       },
       {
@@ -227,7 +272,8 @@ describe('Unwind array', () => {
             innerInnerOneArr: {
               mum: 2
             }
-          }
+          },
+          innerEmptyArr: []
         }
       },
       {
@@ -245,7 +291,8 @@ describe('Unwind array', () => {
             innerInnerOneArr: {
               mum: 2
             }
-          }
+          },
+          innerEmptyArr: []
         }
       },
       {
@@ -263,7 +310,8 @@ describe('Unwind array', () => {
             innerInnerOneArr: {
               mum: 2
             }
-          }
+          },
+          innerEmptyArr: []
         }
       },
       {
@@ -281,7 +329,8 @@ describe('Unwind array', () => {
             innerInnerOneArr: {
               num: 1
             }
-          }
+          },
+          innerEmptyArr: []
         }
       },
       {
@@ -299,7 +348,8 @@ describe('Unwind array', () => {
             innerInnerOneArr: {
               num: 1
             }
-          }
+          },
+          innerEmptyArr: []
         }
       },
       {
@@ -317,7 +367,8 @@ describe('Unwind array', () => {
             innerInnerOneArr: {
               num: 1
             }
-          }
+          },
+          innerEmptyArr: []
         }
       },
       {
@@ -335,7 +386,8 @@ describe('Unwind array', () => {
             innerInnerOneArr: {
               mum: 2
             }
-          }
+          },
+          innerEmptyArr: []
         }
       },
       {
@@ -353,7 +405,8 @@ describe('Unwind array', () => {
             innerInnerOneArr: {
               mum: 2
             }
-          }
+          },
+          innerEmptyArr: []
         }
       },
       {
@@ -371,7 +424,8 @@ describe('Unwind array', () => {
             innerInnerOneArr: {
               mum: 2
             }
-          }
+          },
+          innerEmptyArr: []
         }
       },
       {
@@ -389,7 +443,8 @@ describe('Unwind array', () => {
             innerInnerOneArr: {
               num: 1
             }
-          }
+          },
+          innerEmptyArr: []
         }
       },
       {
@@ -407,7 +462,8 @@ describe('Unwind array', () => {
             innerInnerOneArr: {
               num: 1
             }
-          }
+          },
+          innerEmptyArr: []
         }
       },
       {
@@ -425,7 +481,8 @@ describe('Unwind array', () => {
             innerInnerOneArr: {
               num: 1
             }
-          }
+          },
+          innerEmptyArr: []
         }
       },
       {
@@ -443,7 +500,8 @@ describe('Unwind array', () => {
             innerInnerOneArr: {
               mum: 2
             }
-          }
+          },
+          innerEmptyArr: []
         }
       },
       {
@@ -461,7 +519,8 @@ describe('Unwind array', () => {
             innerInnerOneArr: {
               mum: 2
             }
-          }
+          },
+          innerEmptyArr: []
         }
       },
       {
@@ -479,7 +538,8 @@ describe('Unwind array', () => {
             innerInnerOneArr: {
               mum: 2
             }
-          }
+          },
+          innerEmptyArr: []
         }
       },
       {
