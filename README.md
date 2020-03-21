@@ -1,5 +1,7 @@
 # unwind-array
 
+![Node.js CI](https://github.com/evrastil/unwind-array/workflows/Node.js%20CI/badge.svg)
+
 Unwinds arrays in the similar way like MongoDB $unwind. Supports shallow and deep nested paths, defined as a string with dot notation.
 
 function matches
