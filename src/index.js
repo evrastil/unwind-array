@@ -1,7 +1,7 @@
-const unwindArrays = (dataObject, path) => {
-  return unwindArraysRecursive(dataObject, path)
+const unwind = (dataObject, path) => {
+  return unwindRecursive(dataObject, path)
 }
-const unwindArraysRecursive = (dataObject, path, currPath) => {
+const unwindRecursive = (dataObject, path, currPath) => {
   const pathArr = path.split('.')
   if (!currPath) {
     currPath = pathArr[0]
@@ -28,12 +28,12 @@ const unwindArraysRecursive = (dataObject, path, currPath) => {
       if (dataObject[objectKey] instanceof Array) {
         Object.keys(dataObject[objectKey]).forEach(objectElementKey => {
           addObject(
-            unwindArraysRecursive(dataObject[objectKey][objectElementKey], path.replace(`${currPath}.`, '')),
+            unwindRecursive(dataObject[objectKey][objectElementKey], path.replace(`${currPath}.`, '')),
             objectKey
           )
         })
       } else {
-        addObject(unwindArraysRecursive(dataObject[objectKey], path.replace(`${currPath}.`, '')), objectKey)
+        addObject(unwindRecursive(dataObject[objectKey], path.replace(`${currPath}.`, '')), objectKey)
       }
     }
   })
@@ -43,4 +43,4 @@ const unwindArraysRecursive = (dataObject, path, currPath) => {
   return result
 }
 
-module.exports = { unwindArrays }
+module.exports = { unwind }

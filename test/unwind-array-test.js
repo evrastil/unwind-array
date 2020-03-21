@@ -1,10 +1,10 @@
 const chai = require('chai')
 const { expect } = chai
-const { unwindArrays } = require('../src')
+const { unwind } = require('../src')
 
 describe('Unwind array', () => {
   it('#has expected data for single paths', () => {
-    const result = unwindArrays(
+    const result = unwind(
       {
         title: 'foobar',
         topLevelArr: [
@@ -60,7 +60,7 @@ describe('Unwind array', () => {
     ])
   })
   it('#handles incorrect path', () => {
-    const result = unwindArrays(
+    const result = unwind(
       {
         title: 'foobar',
         topLevelArr: [
@@ -102,7 +102,7 @@ describe('Unwind array', () => {
   ]
   it('#array has expected data for single path', () => {
     const result = testArray
-      .map(piece => unwindArrays(piece, 'topLevelPropertyArray'))
+      .map(piece => unwind(piece, 'topLevelPropertyArray'))
       .reduce((agg, arr) => {
         return [...agg, ...arr]
       }, [])
@@ -126,7 +126,7 @@ describe('Unwind array', () => {
     ])
   })
   it('#has combination of expected data for multiple paths', () => {
-    const result = unwindArrays(
+    const result = unwind(
       {
         title: 'foobar',
         topLevelArr: [
@@ -152,10 +152,10 @@ describe('Unwind array', () => {
       },
       'topLevelArr'
     )
-      .reduce((agg, item) => [...agg, ...unwindArrays(item, 'topLevelArr.innerOneArr')], [])
-      .reduce((agg, item) => [...agg, ...unwindArrays(item, 'topLevelArr.innerEmptyArr')], [])
-      .reduce((agg, item) => [...agg, ...unwindArrays(item, 'topLevelArr.innerThreeArr.innerInnerOneArr')], [])
-      .reduce((agg, item) => [...agg, ...unwindArrays(item, 'topLevelArr.innerTwoArr')], [])
+      .reduce((agg, item) => [...agg, ...unwind(item, 'topLevelArr.innerOneArr')], [])
+      .reduce((agg, item) => [...agg, ...unwind(item, 'topLevelArr.innerEmptyArr')], [])
+      .reduce((agg, item) => [...agg, ...unwind(item, 'topLevelArr.innerThreeArr.innerInnerOneArr')], [])
+      .reduce((agg, item) => [...agg, ...unwind(item, 'topLevelArr.innerTwoArr')], [])
     expect(result.length).to.be.equal(19)
     expect(result).to.be.deep.equal([
       {
