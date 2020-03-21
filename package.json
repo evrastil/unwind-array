@@ -16,6 +16,8 @@
   "types": "types/index.d.ts",
   "keywords": [
     "unwind",
+    "unwinder",
+    "unwinding",
     "array"
   ],
   "author": "evrastil",
