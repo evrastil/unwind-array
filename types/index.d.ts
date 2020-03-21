@@ -3,7 +3,7 @@
  *
  * @param {object} dataObject The object to be unwinded.
  * @param {Options} options specify path that can be used define deep mapping using dots.
- * @returns {object} The resulting uwinded array.
+ * @returns {Array<object>} The resulting uwinded array.
  */
 export declare function unwind(dataObject: object, options: Options): Array<object>
 
