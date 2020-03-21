@@ -10,7 +10,7 @@ function matches
 * @returns {object} the resulting uwinded array.
 
 ```typescript
-export declare function unwindArrays(dataObject: object, path: string): Array<object>
+export declare function unwind(dataObject: object, path: string): Array<object>
 ```
 
 ## example usage
@@ -18,8 +18,8 @@ export declare function unwindArrays(dataObject: object, path: string): Array<ob
 unwinding deep path 
 
 ```javascript 1.8
-    const { unwindArrays } = require('unwind-array')
-    const result = unwindArrays(
+    const { unwind } = require('unwind-array')
+    const result = unwind(
       {
         title: 'foobar',
         topLevelArr: [
@@ -78,8 +78,8 @@ unwinding deep path
 more advanced usage example of unwinding multiple paths, return combination of data defined paths from arrays
 
 ```javascript 1.8
-   const { unwindArrays } = require('unwind-array')
-   const result = unwindArrays(
+   const { unwind } = require('unwind-array')
+   const result = unwind(
       {
         title: 'foobar',
         topLevelArr: [
@@ -105,10 +105,10 @@ more advanced usage example of unwinding multiple paths, return combination of d
       },
       'topLevelArr'
     )
-      .reduce((agg, item) => [...agg, ...unwindArrays(item, 'topLevelArr.innerOneArr')], [])
-      .reduce((agg, item) => [...agg, ...unwindArrays(item, 'topLevelArr.innerEmptyArr')], [])
-      .reduce((agg, item) => [...agg, ...unwindArrays(item, 'topLevelArr.innerThreeArr.innerInnerOneArr')], [])
-      .reduce((agg, item) => [...agg, ...unwindArrays(item, 'topLevelArr.innerTwoArr')], [])
+      .reduce((agg, item) => [...agg, ...unwind(item, 'topLevelArr.innerOneArr')], [])
+      .reduce((agg, item) => [...agg, ...unwind(item, 'topLevelArr.innerEmptyArr')], [])
+      .reduce((agg, item) => [...agg, ...unwind(item, 'topLevelArr.innerThreeArr.innerInnerOneArr')], [])
+      .reduce((agg, item) => [...agg, ...unwind(item, 'topLevelArr.innerTwoArr')], [])
     expect(result.length).to.be.equal(19)
     expect(result).to.be.deep.equal([
       {
