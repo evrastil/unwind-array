@@ -61,6 +61,26 @@ describe('Unwind array', () => {
       }
     ])
   })
+  it('#has expected data for single paths primitive int array', () => {
+    const result = unwind(
+      {
+        title: 'foobar',
+        topLevelArr: [1, 2]
+      },
+      { path: 'topLevelArr' }
+    )
+    expect(result.length).to.be.equal(2)
+    expect(result).to.be.deep.equal([
+      {
+        title: 'foobar',
+        topLevelArr: 1
+      },
+      {
+        title: 'foobar',
+        topLevelArr: 2
+      }
+    ])
+  })
   it('#handles incorrect path', () => {
     const result = unwind(
       {

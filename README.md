@@ -19,7 +19,30 @@ export declare interface Options {
 
 ## example usage
 
-unwinding deep path 
+### ex#1 unwind shallow path
+
+```javascript 1.8
+    const result = unwind(
+      {
+        title: 'foobar',
+        topLevelArr: [1, 2]
+      },
+      { path: 'topLevelArr' }
+    )
+    expect(result.length).to.be.equal(2)
+    expect(result).to.be.deep.equal([
+      {
+        title: 'foobar',
+        topLevelArr: 1
+      },
+      {
+        title: 'foobar',
+        topLevelArr: 2
+      }
+    ])
+```
+
+### ex#2 unwinding deep path 
 
 ```javascript 1.8
     const { unwind } = require('unwind-array')
@@ -81,7 +104,9 @@ unwinding deep path
     ])
 ```
 
-more advanced usage example of unwinding multiple paths, return combination of data defined paths from arrays
+### ex#3 return combination of data defined paths from arrays
+
+more advanced usage example of unwinding multiple paths and `preserveEmptyArray`
 
 ```javascript 1.8
    const { unwind } = require('unwind-array')
