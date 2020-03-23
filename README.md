@@ -17,11 +17,17 @@ export declare interface Options {
 }
 ```
 
+Release
+
+```shell script
+npm version [<newversion> | major | minor | patch] -m "Release %s"
+```
+
 ## example usage
 
-### ex#1 unwind shallow path
+### example #1 unwind shallow path
 
-```javascript 1.8
+```javascript
     const result = unwind(
       {
         title: 'foobar',
@@ -29,22 +35,12 @@ export declare interface Options {
       },
       { path: 'topLevelArr' }
     )
-    expect(result.length).to.be.equal(2)
-    expect(result).to.be.deep.equal([
-      {
-        title: 'foobar',
-        topLevelArr: 1
-      },
-      {
-        title: 'foobar',
-        topLevelArr: 2
-      }
-    ])
+    /*[{title: 'foobar', topLevelArr: 1},{title: 'foobar', topLevelArr: 2}]*/
 ```
 
-### ex#2 unwinding deep path 
+### example #2 unwinding deep path 
 
-```javascript 1.8
+```javascript
     const { unwind } = require('unwind-array')
     const result = unwind(
       {
@@ -63,7 +59,7 @@ export declare interface Options {
       },
       { path: 'topLevelArr.innerOneArr' }
     )
-    expect(result.length).to.be.equal(3)
+    /*expect(result.length).to.be.equal(3)
     expect(result).to.be.deep.equal([
       {
         title: 'foobar',
@@ -101,14 +97,14 @@ export declare interface Options {
           name: 'blah2'
         }
       }
-    ])
+    ])*/
 ```
 
-### ex#3 return combination of data defined paths from arrays
+### example #3 return combination of data defined paths from arrays
 
 more advanced usage example of unwinding multiple paths and `preserveEmptyArray`
 
-```javascript 1.8
+```javascript
    const { unwind } = require('unwind-array')
   const result = unwind(
       {
@@ -149,7 +145,7 @@ more advanced usage example of unwinding multiple paths and `preserveEmptyArray`
       )
       .reduce((agg, item) => [...agg, ...unwind(item, { path: 'topLevelArr.innerThreeArr.innerInnerOneArr' })], [])
       .reduce((agg, item) => [...agg, ...unwind(item, { path: 'topLevelArr.innerTwoArr' })], [])
-    expect(result.length).to.be.equal(19)
+    /*expect(result.length).to.be.equal(19)
     expect(result).to.be.deep.equal([
       {
         title: 'foobar',
@@ -499,5 +495,5 @@ more advanced usage example of unwinding multiple paths and `preserveEmptyArray`
           name: 'blah2'
         }
       }
-    ])
+    ])*/
 ```

@@ -9,5 +9,5 @@ export declare function unwind(dataObject: object, options: Options): Array<obje
 
 export declare interface Options {
     path: string
-    preserveEmptyArray: boolean
+    preserveEmptyArray?: boolean
 }
